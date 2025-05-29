@@ -5,7 +5,7 @@
     <title>追劇資料庫查詢系統</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
-<body>
+<body class="login-page">
     <div class="login-container">
         <h1>追劇查詢系統🎬</h1>
         <form method="post">
@@ -21,7 +21,7 @@
                         <select name="happy{{ i }}">
                             <option value="default">default</option>
                             {% for genre in genres %}
-                                <option value="{{ genre }}">{{ genre }}</option>
+                                <option value="{{ genre.GenreID }}">{{ genre.GenreName }}</option>
                             {% endfor %}
                         </select>
                     {% endfor %}
@@ -35,7 +35,7 @@
                         <select name="mad{{ i }}">
                             <option value="default">default</option>
                             {% for genre in genres %}
-                                <option value="{{ genre }}">{{ genre }}</option>
+                                <option value="{{ genre.GenreID }}">{{ genre.GenreName }}</option>
                             {% endfor %}
                         </select>
                     {% endfor %}
@@ -49,7 +49,7 @@
                         <select name="sorrowful{{ i }}">
                             <option value="default">default</option>
                             {% for genre in genres %}
-                                <option value="{{ genre }}">{{ genre }}</option>
+                                <option value="{{ genre.GenreID }}">{{ genre.GenreName }}</option>
                             {% endfor %}
                         </select>
                     {% endfor %}
