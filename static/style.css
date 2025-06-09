@@ -111,7 +111,7 @@ select {
 button {
     padding: 8px 20px;
     font-size: 16px;
-    background-color: #c11c1c;
+    background-color: #787575;
     color: #fff;
     border: none;
     border-radius: 5px;
@@ -139,7 +139,7 @@ hr {
 }
 
 .recommend-page .emotion-block h2 {
-    color: #c11c1c;
+    color: #787575;
     text-align: center;
     margin-top: 0;
     margin-bottom: 15px;
@@ -164,7 +164,7 @@ hr {
     color: #fff;
     text-decoration: none;
     font-weight: bold;
-    background-color: #c11c1c;
+    background-color: #787575;
     padding: 10px 18px;
     border-radius: 6px;
     font-size: 15px;
@@ -175,7 +175,7 @@ hr {
 /* 按鈕維持紅色樣式 */
 .search-link {
     display: inline-block;
-    background-color: #c11c1c;
+    background-color: #787575;
     color: #fff;
     text-decoration: none;
     padding: 12px 10px;
