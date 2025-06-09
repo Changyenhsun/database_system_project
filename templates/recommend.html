@@ -6,28 +6,33 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body class="recommend-page">
-    <div class="recommend-header">
-        <h1>歡迎 {{ username }}！以下是你的推薦結果 🎉</h1>
+    <div class="recommend-sidebar">
+            <a class="search-link" href="{{ url_for('complex_search') }}">🔎 複合搜尋</a>
     </div>
 
-    <main>
-        <div class="recommend-container">
-            {% for mood, dramas in recommendations.items() %}
-                <div class="emotion-block {{ mood|lower }}">
-                    <h2>
-                        {% if mood == 'Happy' %}😄{% elif mood == 'Angry' %}😡{% elif mood == 'Sad' %}😢{% endif %}
-                        {{ mood }} 時的推薦
-                    </h2>
-                    <ul>
-                        {% for drama in dramas %}
-                            <li>{{ drama.Title }}（{{ drama.GenreName }}）</li>
-                        {% endfor %}
-                    </ul>
-                </div>
-            {% endfor %}
+    <div class="recommend-content">
+        <div class="recommend-header">
+            <h1>歡迎 {{ username }}！以下是你的推薦結果 🎉</h1>
         </div>
-        <a class="back-link" href="/">🔙 回首頁</a>
-    </main>
-</body>
 
+        <main>
+            <div class="recommend-container">
+                {% for mood, dramas in recommendations.items() %}
+                    <div class="emotion-block {{ mood|lower }}">
+                        <h2>
+                            {% if mood == 'Happy' %}😄{% elif mood == 'Angry' %}😡{% elif mood == 'Sad' %}😢{% endif %}
+                            {{ mood }} 時的推薦
+                        </h2>
+                        <ul>
+                            {% for drama in dramas %}
+                                <li>{{ drama.Title }}（{{ drama.GenreName }}）</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                {% endfor %}
+            </div>
+            <a class="back-link" href="/">🔙 回首頁</a>
+        </main>
+    </div>
+</body>
 </html>

@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, jsonify
 import pymysql
 import random
 
@@ -38,6 +38,42 @@ def login():
         return render_template('recommend.html', username=username, recommendations=recommendations)
 
     return render_template('user.html', genres=genre_list)
+
+
+@app.route('/search', methods=['GET', 'POST'])
+def complex_search():
+    if request.method == 'POST':
+        genre = request.form.get('genre')
+        director = request.form.get('director')
+        actor = request.form.get('actor')
+        # 根據條件進行 SQL 搜尋（可擴充）
+        # 回傳查詢結果頁（例如 search_result.html）
+        return f"你選了：類型 {genre}，導演 {director}，演員 {actor}"
+    return render_template('search.html', genres=genre_list)
+
+@app.route('/autocomplete/director')
+def autocomplete_director():
+    q = request.args.get('q', '')
+    cursor = conn.cursor()
+    cursor.execute("""
+        SELECT DISTINCT DirectorName FROM Director
+        WHERE DirectorName LIKE %s
+        LIMIT 10
+    """, (q + '%',))
+    result = [row['DirectorName'] for row in cursor.fetchall()]
+    return jsonify(result)
+
+@app.route('/autocomplete/actor')
+def autocomplete_actor():
+    q = request.args.get('q', '')
+    cursor = conn.cursor()
+    cursor.execute("""
+        SELECT DISTINCT ActorName FROM Actor
+        WHERE ActorName LIKE %s
+        LIMIT 10
+    """, (q + '%',))
+    result = [row['ActorName'] for row in cursor.fetchall()]
+    return jsonify(result)
 
 def get_recommendations(genre_ids, split):
     result = []

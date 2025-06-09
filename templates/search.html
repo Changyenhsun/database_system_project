@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <title>複合搜尋</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='search.css') }}">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body class="search-page">
+    <div class="search-container">
+        <h1>🔍 複合搜尋</h1>
+        <form method="post">
+            <div class="form-group">
+                <label for="genre">選擇類型：</label>
+                <select id="genre" name="genre">
+                    <option value="default">default</option>
+                    {% for g in genres %}
+                        <option value="{{ g.GenreID }}">{{ g.GenreName }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="director">導演名稱：</label>
+                <input type="text" id="director" name="director" autocomplete="off">
+                <ul class="suggestions" id="director-suggestions"></ul>
+            </div>
+
+            <div class="form-group">
+                <label for="actor">演員名稱：</label>
+                <input type="text" id="actor" name="actor" autocomplete="off">
+                <ul class="suggestions" id="actor-suggestions"></ul>
+            </div>
+
+            <div class="submit-container">
+                <button type="submit">搜尋</button>
+            </div>
+        </form>
+        <a class="back-link" href="/">🔙 回首頁</a>
+    </div>
+
+    <script>
+        function setupAutoComplete(inputId, url, suggestionBoxId) {
+            const input = $('#' + inputId);
+            const box = $('#' + suggestionBoxId);
+
+            input.on('input', function () {
+                const query = $(this).val();
+                if (query.length === 0) {
+                    box.empty().hide();
+                    return;
+                }
+                $.get(url, { q: query }, function (data) {
+                    box.empty();
+                    if (data.length > 0) {
+                        data.forEach(function (item) {
+                            box.append(`<li>${item}</li>`);
+                        });
+                        box.show();
+                    } else {
+                        box.hide();
+                    }
+                });
+            });
+
+            box.on('click', 'li', function () {
+                input.val($(this).text());
+                box.empty().hide();
+            });
+        }
+
+        $(document).ready(function () {
+            setupAutoComplete('director', '/autocomplete/director', 'director-suggestions');
+            setupAutoComplete('actor', '/autocomplete/actor', 'actor-suggestions');
+        });
+    </script>
+</body>
+</html>
