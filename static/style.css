@@ -154,6 +154,14 @@ hr {
     font-size: 22px;
 }
 
+.genre-block strong {
+    font-size: 20px;
+    display: block;
+    margin-top: 10px;
+    margin-bottom: 4px;
+    color: #787575; 
+}
+
 .recommend-page .header {
     width: 100%;
     text-align: center;

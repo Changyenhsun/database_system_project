@@ -19,25 +19,60 @@ cursor = conn.cursor()
 cursor.execute("SELECT GenreID, GenreName FROM Genre")
 genre_list = cursor.fetchall()
 
+# 預設類型對應表
+default_genres = {
+    'Happy': ['Comedy', 'Music', 'Family'],
+    'Angry': ['Action', 'Thriller', 'Crime'],
+    'Sad': ['Drama', 'Romance', 'Animation']
+}
+def get_default_ids(names):
+    name_set = set(n.strip().lower() for n in names)
+    return [g['GenreID'] for g in genre_list if g['GenreName'].strip().lower() in name_set]
+
+
 @app.route('/', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
         username = request.form['username']
 
-        # 安全地擷取使用者選擇的 genre ID（過濾掉 default）
+        # 處理 Happy 類型
         happy_genres = [int(g) for g in [request.form.get(f'happy{i}') for i in range(1, 4)] if g and g != 'default']
+        if not happy_genres:
+            happy_genres = get_default_ids(default_genres['Happy'])
+
+        # 處理 Angry 類型
         mad_genres = [int(g) for g in [request.form.get(f'mad{i}') for i in range(1, 4)] if g and g != 'default']
+        if not mad_genres:
+            mad_genres = get_default_ids(default_genres['Angry'])
+
+        # 處理 Sad 類型
         sorrowful_genres = [int(g) for g in [request.form.get(f'sorrowful{i}') for i in range(1, 4)] if g and g != 'default']
+        if not sorrowful_genres:
+            sorrowful_genres = get_default_ids(default_genres['Sad'])
+
+        # 取得推薦資料
+        happy_recommend = get_recommendations(happy_genres, [3, 3, 4])
+        mad_recommend = get_recommendations(mad_genres, [3, 3, 4])
+        sad_recommend = get_recommendations(sorrowful_genres, [3, 3, 4])
 
         recommendations = {
-            'Happy': get_recommendations(happy_genres, [3, 3, 4]),
-            'Angry': get_recommendations(mad_genres, [3, 3, 4]),
-            'Sad': get_recommendations(sorrowful_genres, [3, 3, 4])
+            'Happy': happy_recommend,
+            'Angry': mad_recommend,
+            'Sad': sad_recommend
         }
 
         return render_template('recommend.html', username=username, recommendations=recommendations)
 
-    return render_template('user.html', genres=genre_list)
+    # GET 載入預設選單值
+    happy_defaults = get_default_ids(default_genres['Happy'])
+    angry_defaults = get_default_ids(default_genres['Angry'])
+    sad_defaults = get_default_ids(default_genres['Sad'])
+
+    return render_template('user.html',
+                           genres=genre_list,
+                           happy_defaults=happy_defaults,
+                           angry_defaults=angry_defaults,
+                           sad_defaults=sad_defaults)
 
 @app.route('/mylist')
 def my_list_page():
@@ -60,21 +95,18 @@ def complex_search():
               AND (%s = '' OR Dir.DirectorName = %s)
               AND (%s = '' OR A.ActorName = %s)
         """
-
         values = (genre_id, genre_id, director_name, director_name, actor_name, actor_name)
 
         cursor = conn.cursor()
         cursor.execute(query, values)
-        results = cursor.fetchall()  # 每筆是 dict: {'Title': ...}
+        results = cursor.fetchall()
 
         return render_template('search_result.html', results=results)
 
-    # GET 載入表單頁面
     cursor = conn.cursor()
     cursor.execute("SELECT GenreID, GenreName FROM Genre")
     genre_list = cursor.fetchall()
     return render_template('search.html', genres=genre_list)
-
 
 @app.route('/autocomplete/director')
 def autocomplete_director():

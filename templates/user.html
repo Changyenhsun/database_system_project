@@ -14,42 +14,54 @@
 
             <hr>
 
+            <!-- Happy -->
             <div class="emotion-block">
                 <label>😄 When Happy – Pick 3 Genres：</label>
                 <div class="select-row">
-                    {% for i in range(1, 4) %}
-                        <select name="happy{{ i }}">
+                    {% for i in range(3) %}
+                        <select name="happy{{ i + 1 }}">
                             <option value="default">default</option>
                             {% for genre in genres %}
-                                <option value="{{ genre.GenreID }}">{{ genre.GenreName }}</option>
+                                <option value="{{ genre.GenreID }}"
+                                    {% if happy_defaults and i < happy_defaults|length and genre.GenreID == happy_defaults[i]|int%} selected{% endif %}>
+                                    {{ genre.GenreName }}
+                                </option>
                             {% endfor %}
                         </select>
                     {% endfor %}
                 </div>
             </div>
 
+            <!-- Angry -->
             <div class="emotion-block">
                 <label>😡 When Angry – Pick 3 Genres：</label>
                 <div class="select-row">
-                    {% for i in range(1, 4) %}
-                        <select name="mad{{ i }}">
+                    {% for i in range(3) %}
+                        <select name="mad{{ i + 1 }}">
                             <option value="default">default</option>
                             {% for genre in genres %}
-                                <option value="{{ genre.GenreID }}">{{ genre.GenreName }}</option>
+                                <option value="{{ genre.GenreID }}"
+                                    {% if angry_defaults and i < angry_defaults|length and genre.GenreID == angry_defaults[i]|int%} selected{% endif %}>
+                                    {{ genre.GenreName }}
+                                </option>
                             {% endfor %}
                         </select>
                     {% endfor %}
                 </div>
             </div>
 
+            <!-- Sad -->
             <div class="emotion-block">
                 <label>😢 When Sad – Pick 3 Genres：</label>
                 <div class="select-row">
-                    {% for i in range(1, 4) %}
-                        <select name="sorrowful{{ i }}">
+                    {% for i in range(3) %}
+                        <select name="sorrowful{{ i + 1 }}">
                             <option value="default">default</option>
                             {% for genre in genres %}
-                                <option value="{{ genre.GenreID }}">{{ genre.GenreName }}</option>
+                                <option value="{{ genre.GenreID }}"
+                                    {% if sad_defaults and i < sad_defaults|length and genre.GenreID == sad_defaults[i]|int%} selected{% endif %}>
+                                    {{ genre.GenreName }}
+                                </option>
                             {% endfor %}
                         </select>
                     {% endfor %}
