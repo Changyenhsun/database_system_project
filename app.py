@@ -43,13 +43,35 @@ def login():
 @app.route('/search', methods=['GET', 'POST'])
 def complex_search():
     if request.method == 'POST':
-        genre = request.form.get('genre')
-        director = request.form.get('director')
-        actor = request.form.get('actor')
-        # 根據條件進行 SQL 搜尋（可擴充）
-        # 回傳查詢結果頁（例如 search_result.html）
-        return f"你選了：類型 {genre}，導演 {director}，演員 {actor}"
+        genre_id = request.form.get('genre')
+        director_name = request.form.get('director')
+        actor_name = request.form.get('actor')
+
+        query = """
+            SELECT DISTINCT D.Title
+            FROM Drama D
+            JOIN Director Dir ON D.DirectorID = Dir.DirectorID
+            JOIN Drama_Actor DA ON D.DramaID = DA.DramaID
+            JOIN Actor A ON DA.ActorID = A.ActorID
+            WHERE (%s = 'default' OR D.GenreID = %s)
+              AND (%s = '' OR Dir.DirectorName = %s)
+              AND (%s = '' OR A.ActorName = %s)
+        """
+
+        values = (genre_id, genre_id, director_name, director_name, actor_name, actor_name)
+
+        cursor = conn.cursor()
+        cursor.execute(query, values)
+        results = cursor.fetchall()  # 每筆是 dict: {'Title': ...}
+
+        return render_template('search_result.html', results=results)
+
+    # GET 載入表單頁面
+    cursor = conn.cursor()
+    cursor.execute("SELECT GenreID, GenreName FROM Genre")
+    genre_list = cursor.fetchall()
     return render_template('search.html', genres=genre_list)
+
 
 @app.route('/autocomplete/director')
 def autocomplete_director():

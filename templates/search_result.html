@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <title>搜尋結果</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='search.css') }}">
+</head>
+<body class="search-page">
+    <div class="search-layout">
+        <div class="search-sidebar">
+            <div class="sidebar-buttons">
+                <a class="back-link" href="/">🔙 回首頁</a>
+                <a class="back-link" href="/search">🔁 再搜尋</a>
+            </div>
+        </div>
+
+        <div class="search-content">
+            <div class="search-container">
+                <h1>🎬 搜尋結果</h1>
+                {% if results %}
+                    <ul>
+                        {% for drama in results %}
+                            <li>{{ drama.Title }}</li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <p>❌ 找不到符合條件的戲劇。</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</body>
+</html>
