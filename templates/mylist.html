@@ -7,12 +7,18 @@
     <script src="{{ url_for('static', filename='mylist.js') }}"></script>
 </head>
 <body class="recommend-page">
+    <div class="recommend-sidebar">
+        <a class="back-link" href="/">🔙 回首頁</a>
+    </div>
+
     <div class="recommend-content">
         <h1>📋 我的清單</h1>
         <div class="recommend-container" id="my-list-container">
-            <!-- JavaScript 會把資料插入這裡 -->
+            <ul id="list-items"></ul>
+             <div style="text-align: center; margin-top: 20px;">
+                <button id="clear-list-btn">🗑️ 清空清單</button>
+            </div>
         </div>
-        <a class="back-link" href="/">🔙 回首頁</a>
     </div>
 </body>
 </html>

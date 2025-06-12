@@ -45,6 +45,12 @@ h1 {
     margin: 0;
 }
 
+.recommend-content h1 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #ffffff; /* 或其他亮色 */
+}
+
 .recommend-container {
     display: flex;
     justify-content: center;
@@ -167,11 +173,11 @@ hr {
     text-decoration: none;
     font-weight: bold;
     background-color: #787575;
-    padding: 10px 18px;
     border-radius: 6px;
     font-size: 15px;
     text-align: center;
     width: fit-content;
+    padding: 12px 10px;
 }
 
 .search-link {
@@ -234,5 +240,53 @@ ul {
 
 .mylist-link:hover {
     background-color: #505050;
+}
+
+
+#clear-list-btn {
+    margin-top: 20px;
+    padding: 10px 16px;
+    background-color: #ffdddd;
+    color: #333;
+    border: none;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+#clear-list-btn:hover {
+    background-color: #ffbbbb;
+}
+
+#list-items {
+    list-style: none;
+    padding: 0;
+    width: 100%;
+    max-width: 500px;
+    margin: auto;
+}
+
+#list-items li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 6px 12px;
+    margin-bottom: 8px;
+    background-color: #747272;
+    border-radius: 8px;
+}
+
+.remove-btn {
+    background-color: #ff6666;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    font-size: 12px;
+    padding: 4px 8px;
+    cursor: pointer;
+}
+
+.remove-btn:hover {
+    background-color: #ff3333;
 }
 
