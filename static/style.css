@@ -166,32 +166,21 @@ hr {
     margin: 0;
 }
 
-.back-link {
+.sidebar-button {
     display: block;
-    margin: 40px auto 0;
-    color: #fff;
-    text-decoration: none;
-    font-weight: bold;
-    background-color: #787575;
+    padding: 12px 10px;
     border-radius: 6px;
+    font-weight: bold;
     font-size: 15px;
+    background-color: #787575;
+    color: #fff;
     text-align: center;
-    width: fit-content;
-    padding: 12px 10px;
-}
-
-.search-link {
-    display: inline-block;
-    background-color: #787575;
-    color: #fff;
     text-decoration: none;
-    padding: 12px 10px;
-    border-radius: 6px;
-    font-weight: bold;
-    font-size: 15px;
+    width: 100px;
+    transition: background-color 0.2s ease;
 }
 
-.search-link:hover {
+.sidebar-button:hover {
     background-color: #505050;
 }
 
@@ -224,24 +213,6 @@ ul {
     padding-left: 0;
     margin-left: 0;
 }
-
-.mylist-link {
-    padding: 12px 10px;
-    border-radius: 6px;
-    font-weight: bold;
-    font-size: 15px;
-    display: block;
-    margin-top: 20px;
-    text-align: center;
-    background-color: #787575;
-    color: #fff;
-    text-decoration: none;
-}
-
-.mylist-link:hover {
-    background-color: #505050;
-}
-
 
 #clear-list-btn {
     margin-top: 20px;
