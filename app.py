@@ -39,6 +39,9 @@ def login():
 
     return render_template('user.html', genres=genre_list)
 
+@app.route('/mylist')
+def my_list_page():
+    return render_template("mylist.html")
 
 @app.route('/search', methods=['GET', 'POST'])
 def complex_search():

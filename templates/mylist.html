@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <title>我的清單</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script src="{{ url_for('static', filename='mylist.js') }}"></script>
+</head>
+<body class="recommend-page">
+    <div class="recommend-content">
+        <h1>📋 我的清單</h1>
+        <div class="recommend-container" id="my-list-container">
+            <!-- JavaScript 會把資料插入這裡 -->
+        </div>
+        <a class="back-link" href="/">🔙 回首頁</a>
+    </div>
+</body>
+</html>

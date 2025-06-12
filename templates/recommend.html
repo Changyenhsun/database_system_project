@@ -8,6 +8,8 @@
 <body class="recommend-page">
     <div class="recommend-sidebar">
             <a class="search-link" href="{{ url_for('complex_search') }}">🔎 複合搜尋</a>
+            <a class="mylist-link" href="{{ url_for('my_list_page') }}">📋 我的清單</a>
+
     </div>
 
     <div class="recommend-content">
@@ -25,7 +27,13 @@
                         </h2>
                         <ul>
                             {% for drama in dramas %}
-                                <li>{{ drama.Title }}（{{ drama.GenreName }}）</li>
+                                <li>
+                                    <label class="drama-option">
+                                        <input type="checkbox" class="drama-checkbox" data-title="{{ drama.Title }}" data-genre="{{ drama.GenreName }}">
+                                        <span class="custom-circle"></span>
+                                        {{ drama.Title }}（{{ drama.GenreName }}）
+                                    </label>
+                                </li>
                             {% endfor %}
                         </ul>
                     </div>
@@ -34,5 +42,6 @@
             <a class="back-link" href="/">🔙 回首頁</a>
         </main>
     </div>
+    <script src="{{ url_for('static', filename='recommend.js') }}"></script>
 </body>
 </html>
