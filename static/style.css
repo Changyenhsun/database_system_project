@@ -290,3 +290,28 @@ ul {
     background-color: #ff3333;
 }
 
+.my-list-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.clear-button-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 30px;
+}
+
+#clear-list-btn {
+    padding: 10px 20px;
+    background-color: #ffdddd;
+    color: #333;
+    border: none;
+    border-radius: 10px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+#clear-list-btn:hover {
+    background-color: #ffbbbb;
+}
