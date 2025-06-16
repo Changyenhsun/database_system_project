@@ -17,38 +17,43 @@
         </div>
 
         <!-- 右側內容 -->
-        <div class="search-content">
-            <div class="search-container">
+        <div class="recommend-content">
+            <div class="recommend-header">
                 <h1>🔍 複合搜尋</h1>
-                <form method="post">
-                    <div class="form-group">
-                        <label for="genre">選擇類型：</label>
-                        <select id="genre" name="genre">
-                            <option value="default">default</option>
-                            {% for g in genres %}
-                                <option value="{{ g.GenreID }}">{{ g.GenreName }}</option>
-                            {% endfor %}
-                        </select>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="director">導演名稱：</label>
-                        <input type="text" id="director" name="director" autocomplete="off">
-                        <ul class="suggestions" id="director-suggestions"></ul>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="actor">演員名稱：</label>
-                        <input type="text" id="actor" name="actor" autocomplete="off">
-                        <ul class="suggestions" id="actor-suggestions"></ul>
-                    </div>
-
-                    <div class="submit-container">
-                        <button type="submit">搜尋</button>
-                    </div>
-                </form>
             </div>
-        </div>
+        <main>
+            <div class="search-content">
+                <div class="search-container">
+                    <form method="post">
+                        <div class="form-group">
+                            <label for="genre">選擇類型：</label>
+                            <select id="genre" name="genre">
+                                <option value="default">default</option>
+                                {% for g in genres %}
+                                    <option value="{{ g.GenreID }}">{{ g.GenreName }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="director">導演名稱：</label>
+                            <input type="text" id="director" name="director" autocomplete="off">
+                            <ul class="suggestions" id="director-suggestions"></ul>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="actor">演員名稱：</label>
+                            <input type="text" id="actor" name="actor" autocomplete="off">
+                            <ul class="suggestions" id="actor-suggestions"></ul>
+                        </div>
+
+                        <div class="submit-container">
+                            <button type="submit">搜尋</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </main>
     </div>
     <script src="{{ url_for('static', filename='autocomplete.js') }}"></script>
 </body>

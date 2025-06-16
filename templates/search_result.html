@@ -2,32 +2,41 @@
 <html lang="zh-Hant">
 <head>
     <meta charset="UTF-8">
-    <title>搜尋結果</title>
+    <title>複合查詢結果</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='search.css') }}">
 </head>
-<body class="search-page">
-    <div class="search-layout">
-        <div class="search-sidebar">
-            <div class="sidebar-buttons">
-                <a class="sidebar-button" href="/">🔙 回首頁</a>
-                <a class="sidebar-button" href="/search">🔁 再搜尋</a>
-            </div>
+<body class="recommend-page">
+    <!-- 左側欄 -->
+    <div class="recommend-sidebar">
+        <a class="sidebar-button" href="{{ url_for('complex_search') }}">🔍 再次查詢</a>
+        <a class="sidebar-button" href="{{ url_for('my_list_page') }}">📋 我的清單</a>
+        <a class="sidebar-button" href="/">🔙 回首頁</a>
+    </div>
+
+    <!-- 右側內容 -->
+    <div class="recommend-content">
+        <div class="recommend-header">
+            <h1>🎯 以下是符合搜尋條件的結果</h1>
         </div>
 
-        <div class="search-content">
-            <div class="search-container">
-                <h1>🎬 搜尋結果</h1>
+        <main>
+            <div class="recommend-container">
                 {% if results %}
-                    <ul>
-                        {% for drama in results %}
-                            <li>{{ drama.Title }}</li>
-                        {% endfor %}
-                    </ul>
+                    {% for drama in results %}
+                        <label class="drama-option">
+                            <input type="checkbox" class="drama-checkbox" data-title="{{ drama.Title }}">
+                            <span class="custom-circle"></span>
+                            {{ drama.Title }}
+                        </label><br>
+                    {% endfor %}
                 {% else %}
-                    <p>❌ 找不到符合條件的戲劇。</p>
+                    <p>❌ 找不到符合條件的戲劇，請重新查詢。</p>
                 {% endif %}
             </div>
-        </div>
+        </main>
     </div>
+
+    <!-- JS -->
+    <script src="{{ url_for('static', filename='recommend.js') }}"></script>
 </body>
 </html>

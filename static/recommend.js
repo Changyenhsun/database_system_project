@@ -4,12 +4,15 @@ document.addEventListener("DOMContentLoaded", () => {
     checkboxes.forEach(checkbox => {
         checkbox.addEventListener('change', () => {
             const title = checkbox.dataset.title;
-            const genre = checkbox.dataset.genre;
+            const genre = checkbox.dataset.genre || '未分類';
 
             let list = JSON.parse(localStorage.getItem('myList')) || [];
 
             if (checkbox.checked) {
-                list.push({ title, genre });
+                // 避免重複加入相同戲劇
+                if (!list.some(item => item.title === title)) {
+                    list.push({ title, genre });
+                }
             } else {
                 list = list.filter(item => item.title !== title);
             }
@@ -24,7 +27,11 @@ function showMyList() {
     if (list.length === 0) {
         alert("你的清單是空的喔！");
     } else {
-        const message = list.map(item => `${item.title}（${item.genre}）`).join('\n');
+        const message = list.map(item => {
+            const genreText = item.genre && item.genre !== '未分類' ? `（${item.genre}）` : '';
+            return `${item.title}${genreText}`;
+        }).join('\n');
+
         alert("你的清單：\n\n" + message);
     }
 }
