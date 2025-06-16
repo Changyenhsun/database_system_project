@@ -33,6 +33,24 @@ body.search-page {
     align-items: center;
 }
 
+.sidebar-button {
+    display: block;
+    padding: 12px 10px;
+    border-radius: 6px;
+    font-weight: bold;
+    font-size: 15px;
+    background-color: #787575;
+    color: #fff;
+    text-align: center;
+    text-decoration: none;
+    width: 100px;
+    transition: background-color 0.2s ease;
+}
+
+.sidebar-button:hover {
+    background-color: #505050;
+}
+
 .back-link {
     display: inline-block;
     background-color: #787575;
