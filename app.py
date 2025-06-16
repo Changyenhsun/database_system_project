@@ -71,7 +71,7 @@ def recommend_page():
     if not latest_recommend_data:
         return redirect(url_for('login')) 
     
-    username = request.args.get('username', '使用者')
+    username = latest_recommend_data.get('username', '使用者')
     happy_ids = [int(x) for x in request.args.get('happy', '').split(',') if x.isdigit()]
     mad_ids = [int(x) for x in request.args.get('mad', '').split(',') if x.isdigit()]
     sad_ids = [int(x) for x in request.args.get('sad', '').split(',') if x.isdigit()]
