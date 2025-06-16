@@ -85,24 +85,56 @@ def complex_search():
         director_name = request.form.get('director')
         actor_name = request.form.get('actor')
 
+        genre_id = int(genre_id) if genre_id and genre_id != 'default' else None
+        director_name = director_name.strip() if director_name else None
+        actor_name = actor_name.strip() if actor_name else None
+
+        cursor = conn.cursor()
+
+        director_id = None
+        if director_name:
+            cursor.execute("SELECT DirectorID FROM Director WHERE DirectorName COLLATE utf8mb4_general_ci LIKE %s", (f"%{director_name.strip()}%",))
+            result = cursor.fetchone()
+            if result is not None:
+                director_id = result['DirectorID']
+
+        actor_id = None
+        if actor_name:
+            cursor.execute("SELECT ActorID FROM Actor WHERE ActorName COLLATE utf8mb4_general_ci LIKE %s", (f"%{actor_name.strip()}%",))
+            result = cursor.fetchone()
+            if result is not None:
+                actor_id = result['ActorID']
+
+        # print("使用者輸入條件：")
+        # print("Genre ID:", genre_id)
+        # print("Director ID:", director_id)
+        # print("Actor ID:", actor_id)
+
         query = """
             SELECT DISTINCT D.Title
             FROM Drama D
-            JOIN Director Dir ON D.DirectorID = Dir.DirectorID
-            JOIN Drama_Actor DA ON D.DramaID = DA.DramaID
-            JOIN Actor A ON DA.ActorID = A.ActorID
-            WHERE (%s = 'default' OR D.GenreID = %s)
-              AND (%s = '' OR Dir.DirectorName = %s)
-              AND (%s = '' OR A.ActorName = %s)
+            WHERE (%s IS NULL OR EXISTS (
+                SELECT 1 FROM Drama_Genre DG
+                WHERE DG.drama_id = D.DramaID AND DG.genre_id = %s
+            ))
+            AND (%s IS NULL OR EXISTS (
+                SELECT 1 FROM Drama_Director DD
+                WHERE DD.DramaID = D.DramaID AND DD.DirectorID = %s
+            ))
+            AND (%s IS NULL OR EXISTS (
+                SELECT 1 FROM Drama_Actor DA
+                WHERE DA.DramaID = D.DramaID AND DA.ActorID = %s
+            ));
         """
-        values = (genre_id, genre_id, director_name, director_name, actor_name, actor_name)
 
-        cursor = conn.cursor()
+        values = (genre_id, genre_id, director_id, director_id, actor_id, actor_id)
+
         cursor.execute(query, values)
         results = cursor.fetchall()
 
         return render_template('search_result.html', results=results)
 
+    # GET 方法：載入 genre 下拉選單
     cursor = conn.cursor()
     cursor.execute("SELECT GenreID, GenreName FROM Genre")
     genre_list = cursor.fetchall()
