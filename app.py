@@ -1,6 +1,6 @@
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, render_template, request, jsonify, redirect, url_for
 import pymysql
-import random
+
 
 app = Flask(__name__)
 
@@ -18,7 +18,7 @@ conn = pymysql.connect(
 cursor = conn.cursor()
 cursor.execute("SELECT GenreID, GenreName FROM Genre")
 genre_list = cursor.fetchall()
-
+latest_recommend_data = {}
 # 預設類型對應表
 default_genres = {
     'Happy': ['Comedy', 'Music', 'Family'],
@@ -35,35 +35,27 @@ def login():
     if request.method == 'POST':
         username = request.form['username']
 
-        # 處理 Happy 類型
-        happy_genres = [int(g) for g in [request.form.get(f'happy{i}') for i in range(1, 4)] if g and g != 'default']
-        if not happy_genres:
-            happy_genres = get_default_ids(default_genres['Happy'])
+        # 取出使用者選的 genre ID（或使用預設）
+        def extract_genres(prefix, default_names):
+            ids = [int(g) for g in [request.form.get(f'{prefix}{i}') for i in range(1, 4)] if g and g != 'default']
+            return ids if ids else get_default_ids(default_genres[default_names])
 
-        # 處理 Angry 類型
-        mad_genres = [int(g) for g in [request.form.get(f'mad{i}') for i in range(1, 4)] if g and g != 'default']
-        if not mad_genres:
-            mad_genres = get_default_ids(default_genres['Angry'])
+        happy_genres = extract_genres('happy', 'Happy')
+        mad_genres = extract_genres('mad', 'Angry')
+        sad_genres = extract_genres('sorrowful', 'Sad')
 
-        # 處理 Sad 類型
-        sorrowful_genres = [int(g) for g in [request.form.get(f'sorrowful{i}') for i in range(1, 4)] if g and g != 'default']
-        if not sorrowful_genres:
-            sorrowful_genres = get_default_ids(default_genres['Sad'])
-
-        # 取得推薦資料
-        happy_recommend = get_recommendations(happy_genres, [3, 3, 4])
-        mad_recommend = get_recommendations(mad_genres, [3, 3, 4])
-        sad_recommend = get_recommendations(sorrowful_genres, [3, 3, 4])
-
-        recommendations = {
-            'Happy': happy_recommend,
-            'Angry': mad_recommend,
-            'Sad': sad_recommend
+        # 將資訊 encode 成 URL query string
+        global latest_recommend_data
+        latest_recommend_data = {
+            'username': username,
+            'happy': ','.join(map(str, happy_genres)),
+            'mad': ','.join(map(str, mad_genres)),
+            'sad': ','.join(map(str, sad_genres))
         }
 
-        return render_template('recommend.html', username=username, recommendations=recommendations)
+        return redirect(url_for('recommend_page'))
 
-    # GET 載入預設選單值
+    # GET：載入 user.html
     happy_defaults = get_default_ids(default_genres['Happy'])
     angry_defaults = get_default_ids(default_genres['Angry'])
     sad_defaults = get_default_ids(default_genres['Sad'])
@@ -73,6 +65,33 @@ def login():
                            happy_defaults=happy_defaults,
                            angry_defaults=angry_defaults,
                            sad_defaults=sad_defaults)
+
+@app.route('/recommend')
+def recommend_page():
+    if not latest_recommend_data:
+        return redirect(url_for('login')) 
+    
+    username = request.args.get('username', '使用者')
+    happy_ids = [int(x) for x in request.args.get('happy', '').split(',') if x.isdigit()]
+    mad_ids = [int(x) for x in request.args.get('mad', '').split(',') if x.isdigit()]
+    sad_ids = [int(x) for x in request.args.get('sad', '').split(',') if x.isdigit()]
+
+    # 若沒有資料就用預設值（容錯）
+    happy_ids = happy_ids or get_default_ids(default_genres['Happy'])
+    mad_ids = mad_ids or get_default_ids(default_genres['Angry'])
+    sad_ids = sad_ids or get_default_ids(default_genres['Sad'])
+
+    happy_recommend = get_recommendations(happy_ids, [3, 3, 4])
+    mad_recommend = get_recommendations(mad_ids, [3, 3, 4])
+    sad_recommend = get_recommendations(sad_ids, [3, 3, 4])
+
+    recommendations = {
+        'Happy': happy_recommend,
+        'Angry': mad_recommend,
+        'Sad': sad_recommend
+    }
+
+    return render_template('recommend.html', username=username, recommendations=recommendations)
 
 @app.route('/mylist')
 def my_list_page():
