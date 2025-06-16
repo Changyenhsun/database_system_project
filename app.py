@@ -91,6 +91,12 @@ def complex_search():
 
         cursor = conn.cursor()
 
+        genre_name = None
+        if genre_id:
+            cursor.execute("SELECT GenreName FROM Genre WHERE GenreID = %s", (genre_id,))
+            genre_row = cursor.fetchone()
+            genre_name = genre_row['GenreName'] if genre_row else None
+            
         director_id = None
         if director_name:
             cursor.execute("SELECT DirectorID FROM Director WHERE DirectorName COLLATE utf8mb4_general_ci LIKE %s", (f"%{director_name.strip()}%",))
@@ -132,7 +138,7 @@ def complex_search():
         cursor.execute(query, values)
         results = cursor.fetchall()
 
-        return render_template('search_result.html', results=results)
+        return render_template('search_result.html', results=results, genre_name=genre_name)
 
     # GET 方法：載入 genre 下拉選單
     cursor = conn.cursor()

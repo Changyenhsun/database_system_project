@@ -24,7 +24,7 @@
                 {% if results %}
                     {% for drama in results %}
                         <label class="drama-option">
-                            <input type="checkbox" class="drama-checkbox" data-title="{{ drama.Title }}">
+                            <input type="checkbox" class="drama-checkbox" data-title="{{ drama.Title }}" data-genre="{{ genre_name or '未分類' }}">
                             <span class="custom-circle"></span>
                             {{ drama.Title }}
                         </label><br>

@@ -18,6 +18,8 @@ document.addEventListener("DOMContentLoaded", () => {
             }
 
             localStorage.setItem('myList', JSON.stringify(list));
+            console.log("新增清單項目：", { title, genre });
+
         });
     });
 });
